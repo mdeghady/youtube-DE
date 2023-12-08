@@ -2,21 +2,29 @@
 # S3 Buckets
 ##################################################################################
 
-
-module "s3_bucket" {
-  source = "terraform-aws-modules/s3-bucket/aws"
-
-  bucket = "md-youtube-de-landing"
-  acl    = "private"
-
-  control_object_ownership = true
-  object_ownership         = "ObjectWriter"
+#s3 bucket for landing json data
+resource "aws_s3_bucket" "landing_data_bucket" {
+  bucket        = "md-youtube-de-landing"
+  force_destroy = true
 
   tags = {
-    Terraform = "true"
+    Terraform   = "true"
     Environment = "dev"
-    project = "youtube-DE"
+    project     = "youtube-DE"
   }
 }
+
+#s3 bucket for landing paquet data
+resource "aws_s3_bucket" "cleaned_data_bucket" {
+  bucket        = "md-youtube-de-cleaned-data"
+  force_destroy = true
+
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+    project     = "youtube-DE"
+  }
+}
+
 
 
