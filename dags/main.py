@@ -5,18 +5,19 @@ from myUtils import upload_data_to_s3
 
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
+from airflow.providers.amazon.aws.operators.glue_crawler import GlueCrawlerOperator
 
 
 dag = DAG(
     dag_id = "youtube_DE_project",
-    start_date=datetime.datetime(2023 , 11 , 30),
+    start_date=datetime.datetime(2023 , 12 , 8),
     schedule="@daily",
     catchup=True
 )
 
 retrieve_data = PythonOperator(
     task_id="retrieve_data",
-    python_callable=YoutubeRequest.getRequest,
+    python_callable=YoutubeRequest.get_request,
     dag=dag
 )
 
@@ -40,5 +41,13 @@ save_parquet_data_to_s3 = PythonOperator(
     dag=dag
 )
 
-retrieve_data >> save_json_data_to_s3 >> save_parquet_data_to_s3
+trigger_glue_crawler = GlueCrawlerOperator(
+    task_id="trigger_glue_crawler",
+    dag=dag,
+    region_name = "us-east-1",
+    config={
+        "Name" : "youtube-de-crawler"}
+)
+
+retrieve_data >> save_json_data_to_s3 >> save_parquet_data_to_s3 >> trigger_glue_crawler
 
