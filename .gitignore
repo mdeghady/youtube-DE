@@ -1,5 +1,7 @@
 *.terraform
-*.tfstate
+*.backup
 *.tfplan
 *.hcl
 todelete.py
+terraform.tfstate.backup
+terraform.tfstate
