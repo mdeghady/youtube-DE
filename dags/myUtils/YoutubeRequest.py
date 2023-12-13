@@ -11,6 +11,8 @@ def get_request(**context):
     :param context: airflow context
 
     """
+    logging.info(f"starting the workflow on {context['data_interval_start']}")
+
     api_key = Variable.get("api_key")
 
     # Variable returns countries_codes as a string so json.loads will return it to list

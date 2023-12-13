@@ -1,7 +1,7 @@
 import json
 import logging
 import pandas as pd
-from io import StringIO
+
 
 from airflow.models import Variable
 from airflow.providers.amazon.aws.operators.s3 import S3CreateObjectOperator
@@ -74,7 +74,7 @@ def convert_to_parquet(json_file):
     df_cleaned["duration"] = pd.to_timedelta(df_cleaned['contentDetails.duration']).dt.total_seconds().astype('Int64')
     df_cleaned.drop('contentDetails.duration' , inplace=True , axis=1)#remove the old duration column
 
-    #convert these columns from string type to float type to make it easy to ingest to data base
+    #convert these columns from string type to float type to make it easy to ingest to database
     df_cleaned["statistics.viewCount"] = pd.to_numeric(df_cleaned["statistics.viewCount"], errors="coerce",
                                                        downcast="float")
     df_cleaned["statistics.likeCount"] = pd.to_numeric(df_cleaned["statistics.likeCount"], errors="coerce",
