@@ -12,7 +12,7 @@ dag = DAG(
     dag_id = "youtube_DE_project",
     start_date=datetime.datetime(2023 , 12 , 8),
     schedule="@daily",
-    catchup=True
+    catchup=False
 )
 
 retrieve_data = PythonOperator(
